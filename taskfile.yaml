@@ -6,8 +6,8 @@ version: '3'
 
 vars:
   UV: '{{ joinPath (env "HOME") ".local/bin/uv" | toSlash}}'
-  MESON: '{{ joinPath .TASKFILE_DIR ".venv/Scripts/meson" | toSlash}}'
-  NINJA: '{{ joinPath .TASKFILE_DIR ".venv/Scripts/ninja" | toSlash}}'
+  MESON: meson # '{{ joinPath .TASKFILE_DIR ".venv/Scripts/meson" | toSlash}}'
+  NINJA: ninja # '{{ joinPath .TASKFILE_DIR ".venv/Scripts/ninja" | toSlash}}'
 
 tasks:
   default:
@@ -19,7 +19,7 @@ tasks:
             mingw-w64-x86_64-vala \
             mingw-w64-x86_64-uv \
             mingw-w64-x86_64-go \
-            glib2 unzip ninja
+            glib2 unzip ninja meson cmake
       - cmd: |
           if ! "{{.UV}}" --version > /dev/null 2>&1; then
             curl -LsSf https://astral.sh/uv/install.sh | sh
