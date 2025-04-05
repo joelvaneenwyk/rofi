@@ -55,3 +55,7 @@ core
 
 # Build
 ylwrap
+
+/bin/
+.build/
+.venv/
