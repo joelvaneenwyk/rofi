@@ -1,0 +1,41 @@
+# https://taskfile.dev
+# pacman -S --noconfirm --needed unzip
+# sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
+
+version: '3'
+
+vars:
+  UV: '{{ joinPath (env "HOME") ".local/bin/uv" | toSlash}}'
+  MESON: '{{ joinPath .TASKFILE_DIR ".venv/Scripts/meson" | toSlash}}'
+  NINJA: '{{ joinPath .TASKFILE_DIR ".venv/Scripts/ninja" | toSlash}}'
+
+tasks:
+  default:
+    cmds:
+      - cmd: |
+          git submodule update --init --recursive
+      - cmd: |
+          pacman -S --noconfirm --needed \
+            mingw-w64-x86_64-vala \
+            mingw-w64-x86_64-uv \
+            mingw-w64-x86_64-go \
+            glib2 unzip ninja
+      - cmd: |
+          if ! "{{.UV}}" --version > /dev/null 2>&1; then
+            curl -LsSf https://astral.sh/uv/install.sh | sh
+          fi
+      - cmd: |
+          if ! {{.UV}} sync --locked; then
+            rm -rf .venv
+            {{.UV}} sync
+          fi
+      - cmd: |
+          {{.MESON}} setup builddir -Db_coverage=true
+      - cmd: |
+          {{.NINJA}} -C builddir
+      - cmd: |
+          {{.NINJA}} -C builddir dist
+      - cmd: |
+          {{.NINJA}} -C builddir test
+      - cmd: |
+          {{.NINJA}} -C builddir doc/html > doxygen.log 2>&1 
