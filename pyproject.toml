@@ -1,0 +1,18 @@
+[project]
+name = "rofi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "cmake>=4.0.0",
+    "meson>=1.7.2",
+    "ninja>=1.11.1.4",
+]
+
+[tool.uv]
+managed = true
+package = false
